@@ -180,6 +180,7 @@ public class RestApiClient {
     public <T> T postApi(String uri, MediaType mediaType, Object requestType, Class<?> responseClass, String bearerToken){
         T result = null;
         try {
+            log.info("token: {}",bearerToken);
             log.info("RestApiClient::postApi()::entry uri: {}", uri);
             result = (T) plainRestTemplate.postForObject(uri, setRequestHeader(requestType, mediaType, bearerToken), responseClass);
         } catch (Exception e) {

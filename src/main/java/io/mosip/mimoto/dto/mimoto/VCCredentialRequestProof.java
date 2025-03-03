@@ -16,5 +16,7 @@ public class VCCredentialRequestProof {
 
     private String jwt;
 
+    private String access_token;
+
     private String cwt;
 }

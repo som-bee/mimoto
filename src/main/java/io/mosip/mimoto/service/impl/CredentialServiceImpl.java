@@ -199,7 +199,7 @@ public class CredentialServiceImpl implements CredentialService {
         VCCredentialResponse vcCredentialResponse=null;
         try {
             vcCredentialResponse = restApiClient.postApi(credentialEndpoint, MediaType.APPLICATION_JSON,
-                    vcCredentialRequest, VCCredentialResponse.class);
+                    vcCredentialRequest, VCCredentialResponse.class, accessToken);
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -307,12 +307,13 @@ public class CredentialServiceImpl implements CredentialService {
     }
 
     public VCCredentialRequest generateVCCredentialRequestNew(IssuerDTO issuerDTO, CredentialIssuerWellKnownResponse credentialIssuerWellKnownResponse, CredentialsSupportedResponse credentialsSupportedResponse, String accessToken) throws Exception {
-        //String jwt = joseUtil.generateJwt(credentialIssuerWellKnownResponse.getCredentialIssuer(), issuerDTO.getClient_id(), accessToken);
+        String jwt = joseUtil.generateJwt(credentialIssuerWellKnownResponse.getCredentialIssuer(), issuerDTO.getClient_id(), accessToken);
         return VCCredentialRequest.builder()
                 .format(credentialsSupportedResponse.getFormat())
                 .proof(VCCredentialRequestProof.builder()
                         .proofType(credentialsSupportedResponse.getProofTypesSupported().keySet().stream().findFirst().get())
-                        .jwt(accessToken)
+                        .jwt(jwt)
+                        .access_token(accessToken)
                         .build())
                 .credentialDefinition(VCCredentialDefinition.builder()
                         .type(credentialsSupportedResponse.getCredentialDefinition().getType())
